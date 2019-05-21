@@ -16,6 +16,13 @@
 						<i class="dicon {{constants.Icon.Tick}}" />
 					{{/if}}
 				</li>
+                <li class="option {{if isOAuth2Provider "selected"}}" {{action "onOAuth2"}}>
+                    <div class="text-header">OAuth2</div>
+                    <div class="text">Via plain OAuth2 authentication</div>
+                    {{#if isOAuth2Provider}}
+                        <i class="dicon {{constants.Icon.Tick}}" />
+                    {{/if}}
+                </li>
 				<li class="option {{if isLDAPProvider "selected"}}" {{action "onLDAP"}}>
 					<div class="text-header">LDAP</div>
 					<div class="text">Connect to LDAP/ Active Directory</div>
@@ -74,6 +81,34 @@
 				{{x-toggle value=keycloakConfig.defaultPermissionAddSpace size="medium" theme="light" onToggle=(action (mut keycloakConfig.defaultPermissionAddSpace))}}
 			</div>
 		{{/if}}
+
+        {{#if isOAuth2Provider}}
+            <div class="form-group">
+                <label for="oauth2-auth-url">OAuth2 Auth URL</label>
+                {{focus-input id="oauth2-auth-url" type="text" value=oauth2Config.authUrl class=(if OAuth2AuthUrlError "form-control is-invalid" "form-control")}}
+                <small class="form-text text-muted">e.g. http://localhost:8888/oauth/authorize</small>
+            </div>
+            <div class="form-group">
+                <label for="oauth2-token-url">OAuth2 Token URL</label>
+                {{input id="oauth2-token-url" type="text" value=oauth2Config.tokenUrl class=(if OAuth2TokenUrlError "form-control is-invalid" "form-control")}}
+                <small class="form-text text-muted">e.g. http://localhost:8888/oauth/token</small>
+            </div>
+            <div class="form-group">
+                <label for="oauth2-clientId">OAuth2 Client ID</label>
+                {{input id="oauth2-clientId" type="text" value=oauth2Config.clientId class=(if OAuth2ClientIdError "form-control is-invalid" "form-control")}}
+                <small class="form-text text-muted">e.g. account</small>
+            </div>
+            <div class="form-group">
+                <label for="oauth2-secret">OAuth2 Secret</label>
+                {{input id="oauth2-secret" type="text" value=oauth2Config.secret class=(if OAuth2SecretError "form-control is-invalid" "form-control")}}
+                <small class="form-text text-muted">e.g. account</small>
+            </div>
+            <div class="form-group">
+                <label for="oauth2-scope">OAuth2 Scope</label>
+                {{input id="oauth2-scope" type="text" value=oauth2Config.scope }}
+                <small class="form-text text-muted">Space separated scopes e.g. user_info user_profile</small>
+            </div>
+        {{/if}}
 
 		{{#if isLDAPProvider}}
 			<div class="form-group">
@@ -173,6 +208,10 @@
 
 	{{#if (gt keycloakFailure.length 0)}}
 		<p class="admin-setting-failure my-3">Keycloak connection failed: {{keycloakFailure}}</p>
+	{{/if}}
+
+    {{#if (gt oauth2Failure.length 0)}}
+		<p class="admin-setting-failure my-3">OAuth2 connection failed: {{oauth2Failure}}</p>
 	{{/if}}
 </div>
 

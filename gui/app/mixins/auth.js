@@ -26,6 +26,7 @@ export default Mixin.create({
 		this.set('isAuthProviderDocumize', this.get('appMeta.authProvider') === constants.AuthProvider.Documize);
 		this.set('isAuthProviderKeycloak', this.get('appMeta.authProvider') === constants.AuthProvider.Keycloak);
 		this.set('isAuthProviderLDAP', this.get('appMeta.authProvider') === constants.AuthProvider.LDAP);
+		this.set('isAuthProviderOAuth2', this.get('appMeta.authProvider') === constants.AuthProvider.OAuth2);
 
 		if (this.get('appMeta.authProvider') === constants.AuthProvider.LDAP) {
 			let config = this.get('appMeta.authConfig');

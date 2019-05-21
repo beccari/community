@@ -28,7 +28,8 @@ let constants = EmberObject.extend({
 		ServerTypeLDAP: 'ldap',
 		ServerTypeAD: 'ad',
 		EncryptionTypeNone: 'none',
-		EncryptionTypeStartTLS: 'starttls'
+		EncryptionTypeStartTLS: 'starttls',
+		OAuth2: 'oauth2'
     },
 
 	DocumentActionType: { // eslint-disable-line ember/avoid-leaking-state-in-ember-objects

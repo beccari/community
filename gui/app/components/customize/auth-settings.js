@@ -29,6 +29,9 @@ export default Component.extend(ModalMixin, Notifier, {
 	isKeycloakProvider: computed('authProvider', function() {
 		return this.get('authProvider') === this.get('constants').AuthProvider.Keycloak;
 	}),
+	isOAuth2Provider: computed('authProvider', function() {
+		return this.get('authProvider') === this.get('constants').AuthProvider.OAuth2;
+	}),
 	isLDAPProvider: computed('authProvider', function() {
 		return this.get('authProvider') === this.get('constants').AuthProvider.LDAP;
 	}),
@@ -40,6 +43,12 @@ export default Component.extend(ModalMixin, Notifier, {
 	KeycloakAdminUserError: empty('keycloakConfig.adminUser'),
 	KeycloakAdminPasswordError: empty('keycloakConfig.adminPassword'),
 	keycloakFailure: '',
+
+	OAuth2AuthUrlError: empty('oauth2Config.authUrl'),
+	OAuth2TokenUrlError: empty('oauth2Config.tokenUrl'),
+	OAuth2ClientIdError: empty('oauth2Config.clientId'),
+	OAuth2SecretError: empty('oauth2Config.secret'),
+	oauth2Failure: '',
 
 	ldapErrorServerHost: empty('ldapConfig.serverHost'),
 	ldapErrorServerPort: computed('ldapConfig.serverPort', function() {
@@ -74,6 +83,14 @@ export default Component.extend(ModalMixin, Notifier, {
 			disableLogout: false,
 			defaultPermissionAddSpace: false
 		};
+
+		this.oauth2Config = {
+			authUrl: '',
+			tokenUrl: '',
+			clientId: '',
+			secret: '',
+			scope: ''
+		}
 	},
 
 	didReceiveAttrs() {
@@ -133,6 +150,11 @@ export default Component.extend(ModalMixin, Notifier, {
 		onKeycloak() {
 			let constants = this.get('constants');
 			this.set('authProvider', constants.AuthProvider.Keycloak);
+		},
+
+		onOAuth2() {
+			let constants = this.get('constants');
+			this.set('authProvider', constants.AuthProvider.OAuth2);
 		},
 
 		onLDAP() {
@@ -211,6 +233,38 @@ export default Component.extend(ModalMixin, Notifier, {
 					set(config, 'publicKey', encoding.Base64.encode(this.get('keycloakConfig.publicKey')));
 					break;
 
+				case constants.AuthProvider.OAuth2:
+					if (this.get('OAuth2AuthUrlError')) {
+						this.$("#oauth2-auth-url").focus();
+						return;
+					}
+					if (this.get('OAuth2TokenUrlError')) {
+						this.$("#oauth2-token-url").focus();
+						return;
+					}
+					if (this.get('OAuth2ClientIdError')) {
+						this.$("#oauth2-clientId").focus();
+						return;
+					}
+					if (this.get('OAuth2SecretError')) {
+						this.$("#oauth2-secret").focus();
+						return;
+					}
+					if (this.get('OAuth2ScopeError')) {
+						this.$("#oauth2-scope").focus();
+						return;
+					}
+
+					config = copy(this.get('oauth2Config'));
+					config.authUrl = config.authUrl.trim();
+					config.tokenUrl = config.tokenUrl.trim();
+					config.clientId = config.clientId.trim();
+					config.secret = config.secret.trim();
+					config.scope = config.scope.trim();
+
+					break;
+
+
 				case constants.AuthProvider.LDAP:
 					if (this.get('ldapErrorServerHost')) {
 						this.$("#ldap-host").focus();
@@ -254,6 +308,24 @@ export default Component.extend(ModalMixin, Notifier, {
 							}
 						}
 					});
+				}
+
+				// OAuth2 sync process
+				if (data.authProvider === constants.AuthProvider.OAuth2) {
+					this.get('onSyncOAuth2')().then((response) => {
+						if (response.isError) {
+							this.set('oauth2Failure', response.message);
+							console.log(response.message);
+							data.authProvider = constants.AuthProvider.Documize;
+							this.get('onSave')(data).then(() => {});
+						} else {
+							if (data.authProvider === this.get('appMeta.authProvider')) {
+								console.log(response.message);
+							} else {
+								this.get('onChange')(data);
+							}
+						}
+					})
 				}
 
 				// LDAP sync process

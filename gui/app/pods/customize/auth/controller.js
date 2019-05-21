@@ -48,6 +48,15 @@ export default Controller.extend(NotifierMixin, {
 			});
 		},
 
+
+		onSyncOAuth2() {
+			return new EmberPromise((resolve) => {
+				this.get('global').syncOAuth2().then((response) => {
+					resolve(response);
+				});
+			});
+		},
+
 		onChange(data) {
 			this.get('session').logout();
 			this.set('appMeta.authProvider', data.authProvider);

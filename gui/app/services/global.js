@@ -110,6 +110,18 @@ export default Service.extend({
 		}
 	},
 
+	syncOAuth2() {
+		if (this.get('sessionService.isAdmin')) {
+			return this.get('ajax').request(`global/sync/oauth2`, {
+				method: 'GET'
+			}).then((response) => {
+				return response;
+			}).catch((error) => {
+				return error;
+			});
+		}
+	},
+
 	syncLDAP() {
 		if(this.get('sessionService.isAdmin')) {
 			return this.get('ajax').request(`global/ldap/sync`, {
