@@ -1,24 +1,41 @@
 <div class="view-customize">
 	<form>
-		<h2>Jira</h2>
-		<p>Displays issues within documentation</p>
+        <h2>Miisy</h2>
+		<p>Displays Miisy issues within documentation</p>
 		<div class="form-group">
-			<label for="jira-url">URL</label>
-			{{focus-input id="jira-url" type="text" value=jiraCreds.url class="form-control"}}
-			<small class="form-text text-muted">Fully qualified domain name for your Jira instance e.g. http://jira.example.org</small>
+			<label for="miisy-url">URL</label>
+			{{focus-input id="miisy-url" type="text" value=miisyCreds.url class="form-control"}}
+			<small class="form-text text-muted">Fully qualified domain name for your Miisy instance e.g. https://qa.issues.miisy.com</small>
 		</div>
 		<div class="form-group">
-			<label for="jira-username">Username</label>
-			{{input id="jira-username" type="text" value=jiraCreds.username class="form-control"}}
-			<small class="form-text text-muted">Your Jira login username/email</small>
+			<label for="miisy-username">Username</label>
+			{{input id="miisy-username" type="text" value=miisyCreds.username class="form-control"}}
+			<small class="form-text text-muted">Your Miisy login username/email</small>
 		</div>
 		<div class="form-group">
-			<label for="jira-secret">Password</label>
-			{{input id="jira-secret" type="password" value=jiraCreds.secret class="form-control"}}
-			<small class="form-text text-muted">Provide API Token if using Atlassian Cloud or Password when self-hosting Jira</small>
+			<label for="miisy-secret">Password</label>
+			{{input id="miisy-secret" type="password" value=miisyCreds.secret class="form-control"}}
+			<small class="form-text text-muted">Provide Password</small>
 		</div>
+        <h2>Jira</h2>
+        <p>Displays issues within documentation</p>
+        <div class="form-group">
+            <label for="jira-url">URL</label>
+            {{focus-input id="jira-url" type="text" value=jiraCreds.url class="form-control"}}
+            <small class="form-text text-muted">Fully qualified domain name for your Jira instance e.g. http://jira.example.org</small>
+        </div>
+        <div class="form-group">
+            <label for="jira-username">Username</label>
+            {{input id="jira-username" type="text" value=jiraCreds.username class="form-control"}}
+            <small class="form-text text-muted">Your Jira login username/email</small>
+        </div>
+        <div class="form-group">
+            <label for="jira-secret">Password</label>
+            {{input id="jira-secret" type="password" value=jiraCreds.secret class="form-control"}}
+            <small class="form-text text-muted">Provide API Token if using Atlassian Cloud or Password when self-hosting Jira</small>
+        </div>
 
-		{{#if session.isGlobalAdmin}}
+        {{#if session.isGlobalAdmin}}
 			<h2>Trello</h2>
 			<p>Displays boards within documentation</p>
 			<div class="form-group">

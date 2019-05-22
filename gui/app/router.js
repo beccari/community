@@ -145,6 +145,9 @@ export default Router.map(function () {
 			this.route('keycloak', {
 				path: 'keycloak'
 			});
+			this.route('oauth2', {
+				path: 'oauth2'
+			});
 			this.route('login', {
 				path: 'login'
 			});

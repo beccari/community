@@ -79,5 +79,7 @@ module.exports = function (defaults) {
 
 	app.import('vendor/bootstrap.bundle.min.js');
 
+	app.import('vendor/client-oauth2.js');
+
 	return app.toTree();
 };

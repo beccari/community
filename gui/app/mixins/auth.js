@@ -17,6 +17,7 @@ export default Mixin.create({
 	isAuthProviderDocumize: true,
 	isAuthProviderKeycloak: false,
 	isAuthProviderLDAP: false,
+	isAuthProviderOAuth2: false,
 	isDualAuth: false,
 
 	init() {
