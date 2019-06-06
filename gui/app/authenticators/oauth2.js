@@ -18,7 +18,6 @@ import Base from 'ember-simple-auth/authenticators/base';
 export default Base.extend({
 	ajax: service(),
 	appMeta: service(),
-	kcAuth: service(),
 	localStorage: service(),
 
 	restore(data) {

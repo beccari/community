@@ -315,12 +315,12 @@ export default Component.extend(ModalMixin, Notifier, {
 					this.get('onSyncOAuth2')().then((response) => {
 						if (response.isError) {
 							this.set('oauth2Failure', response.message);
-							console.log(response.message);
+							console.log(response.message); // eslint-disable-line no-console
 							data.authProvider = constants.AuthProvider.Documize;
 							this.get('onSave')(data).then(() => {});
 						} else {
 							if (data.authProvider === this.get('appMeta.authProvider')) {
-								console.log(response.message);
+								console.log(response.message); // eslint-disable-line no-console
 							} else {
 								this.get('onChange')(data);
 							}

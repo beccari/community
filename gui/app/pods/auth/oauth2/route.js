@@ -17,7 +17,7 @@ import Route from '@ember/routing/route';
 export default Route.extend({
 	session: service(),
 	appMeta: service(),
-	kcAuth: service(),
+	oauth2: service(),
 	localStorage: service(),
 	queryParams: {
 		mode: {
@@ -32,24 +32,19 @@ export default Route.extend({
 
 			this.set('mode', !_.isUndefined(transition.to.queryParams.mode) ? transition.to.queryParams.mode : 'reject');
 
-/*
-			let oauth = new ClientOAuth2({
-				clientId: '',
-                clientSecret: '',
-                accessTokenUri: '',
-                authorizationUri: '',
-                scopes: ['read', 'user_profile']
-			});
-*/
+
+			//console.log("got this", oauth2); // eslint-disable-line no-console
 
 			if (this.get('mode') === 'reject' || this.get('appMeta.authProvider') !== constants.AuthProvider.OAuth2) {
 				resolve();
 			}
 
-			this.get('kcAuth').fetchProfile().then((profile) => {
-				let data = this.get('kcAuth').mapProfile(profile);
+			let oauth2 = this.get('oauth2');
 
-				this.get("session").authenticate('authenticator:keycloak', data).then(() => {
+			oauth2.fetchProfile().then((profile) => {
+				let data = this.get('oauth2').mapProfile(profile);
+
+				this.get("session").authenticate('authenticator:oauth2', data).then(() => {
 					this.transitionTo('folders');
 				}, (reject) => {
 					if (!_.isUndefined(reject.Error)) {
